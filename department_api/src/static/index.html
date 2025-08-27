@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Department Management System</title>
+        <link rel="icon" type="image/png" href="https://www.shutterstock.com/image-vector/department-head-icon-vector-260nw-1939939932.jpg">
+        <style>
+            @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+            /* Updated Color Scheme */
+            :root {
+                --primary-color: #2BC0E4; /* Light Blue */
+                --secondary-color: #EAECC6; /* Light Cream */
+                --background-gradient: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+                --text-color: #2c3e50; /* Dark Blue */
+                --card-bg: rgba(255, 255, 255, 0.95);
+                --border-color: #dcdde1;
+                --focus-color: #ffb347; /* Orange */
+                --spacing: 1rem;
+                --radius: 12px;
+                --shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+                --shadow-hover: 0 10px 40px rgba(0, 0, 0, 0.2);
+            }
+
+            body {
+                font-family: 'Poppins', sans-serif;
+                background: var(--background-gradient);
+                color: var(--text-color);
+                min-height: 100vh;
+                margin: 0;
+                overflow-x: hidden;
+            }
+
+            /* Enhanced Menu Bar Design */
+            header {
+                background: var(--primary-color);
+                color: #fff;
+                padding: 1rem 2rem;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                box-shadow: var(--shadow);
+            }
+
+            header h1 {
+                font-size: 1.8rem;
+                font-weight: 700;
+                margin: 0;
+            }
+
+            nav {
+                display: flex;
+                gap: 1.5rem;
+            }
+
+            nav a {
+                color: #fff;
+                text-decoration: none;
+                font-size: 1rem;
+                font-weight: 500;
+                padding: 0.5rem 1rem;
+                border-radius: var(--radius);
+                transition: background 0.3s, transform 0.3s;
+            }
+
+            nav a:hover {
+                background: var(--focus-color);
+                transform: translateY(-3px);
+            }
+
+            nav a[aria-current="page"] {
+                background: #fff;
+                color: var(--primary-color);
+                font-weight: 600;
+            }
+
+            @media (max-width: 768px) {
+                nav {
+                    flex-direction: column;
+                    align-items: center;
+                    gap: 1rem;
+                }
+            }
+
+            header {
+                background: transparent;
+                color: #fff;
+                padding: 20px 40px;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                animation: slideDown 0.5s ease-out;
+            }
+
+            @keyframes slideDown {
+                from {
+                    transform: translateY(-100%);
+                }
+                to {
+                    transform: translateY(0);
+                }
+            }
+
+            /* All JavaScript code moved to <script> block below. Only CSS remains here. */
+
+            @keyframes popIn {
+                from {
+                    opacity: 0;
+                    transform: scale(0.9);
+                }
+                to {
+                    opacity: 1;
+                    transform: scale(1);
+                }
+            }
+
+            .hero {
+                text-align: center;
+                background: var(--card-bg);
+                margin: 2rem auto;
+                padding: 3rem 2rem;
+                border-radius: var(--radius);
+                box-shadow: var(--shadow);
+                max-width: 800px;
+                backdrop-filter: blur(10px);
+            }
+            .hero h2 {
+                font-size: 2.8rem;
+                margin-bottom: 1rem;
+                font-weight: 700;
+                color: var(--primary-color);
+            }
+            .hero p {
+                font-size: 1.2rem;
+                color: #555;
+            }
+            .actions-bar {
+                display: flex;
+                justify-content: center;
+                gap: 1.5rem;
+                margin-bottom: 2rem;
+                flex-wrap: wrap;
+            }
+            .actions-bar a {
+                text-decoration: none;
+                padding: 0.8rem 1.8rem;
+                background: #fff;
+                color: var(--primary-color);
+                font-size: 1rem;
+                font-weight: 600;
+                border-radius: 50px;
+                transition: background 0.3s, color 0.3s, transform 0.3s;
+                box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            }
+            .actions-bar a:hover {
+                background: var(--primary-color);
+                color: #fff;
+                transform: translateY(-3px);
+            }
+            .departments-grid {
+                display: grid;
+                gap: 2rem;
+                grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+                margin-bottom: 2rem;
+            }
+            .card {
+                background: var(--card-bg);
+                border: 1px solid transparent;
+                border-radius: var(--radius);
+                padding: 2rem;
+                box-shadow: var(--shadow);
+                cursor: pointer;
+                transition: box-shadow 0.3s, transform 0.3s, border-color 0.3s;
+                animation: popIn 0.5s ease-out forwards;
+                opacity: 0;
+            }
+
+            @keyframes popIn {
+                from {
+                    opacity: 0;
+                    transform: scale(0.9);
+                }
+                to {
+                    opacity: 1;
+                    transform: scale(1);
+                }
+            }
+
+            .card:hover {
+                transform: translateY(-10px) scale(1.05);
+                box-shadow: var(--shadow-hover);
+                border-color: var(--primary-color);
+            }
+            .card h3 {
+                font-size: 1.5rem;
+                margin-bottom: 0.5rem;
+                color: var(--primary-color);
+                font-weight: 600;
+            }
+            .card p {
+                font-size: 1rem;
+                color: #555;
+            }
+            .search-bar {
+                display: flex;
+                justify-content: center;
+                margin-bottom: 2rem;
+            }
+            .search-bar input {
+                width: 100%;
+                max-width: 500px;
+                padding: 1rem 1.5rem;
+                border-radius: 50px;
+                border: 1px solid var(--border-color);
+                font-size: 1rem;
+                transition: all 0.3s;
+                box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            }
+            .search-bar input:focus {
+                outline: none;
+                border-color: var(--primary-color);
+                box-shadow: 0 0 0 4px rgba(106, 17, 203, 0.2);
+            }
+            .form-container {
+                background: var(--card-bg);
+                padding: 3rem;
+                border-radius: var(--radius);
+                max-width: 600px;
+                margin: 2rem auto;
+                box-shadow: var(--shadow);
+            }
+
+            /* Modern table styling for Users tab */
+            table {
+                width: 100%;
+                border-collapse: collapse;
+                margin-top: 1rem;
+                background: var(--card-bg);
+                border-radius: var(--radius);
+                overflow: hidden;
+                box-shadow: var(--shadow);
+            }
+            th, td {
+                padding: 1rem;
+                text-align: left;
+                border-bottom: 1px solid var(--border-color);
+            }
+            th {
+                background: var(--primary-color);
+                color: #fff;
+                font-weight: 600;
+            }
+            tr:last-child td {
+                border-bottom: none;
+            }
+            tr:hover td {
+                background: #f3f6fa;
+            }
+            .button {
+                min-width: 80px;
+                margin-right: 0.5rem;
+            }
+            .button[style*="background:#e74c3c"] {
+                background: #e74c3c !important;
+                color: #fff !important;
+            }
+            @media (max-width: 600px) {
+                table, th, td {
+                    font-size: 0.9rem;
+                    padding: 0.5rem;
+                }
+                .form-container {
+                    padding: 1rem;
+                }
+            }
+            .form-group {
+                margin-bottom: 1.5rem;
+            }
+            .form-group label {
+                display: block;
+                margin-bottom: 0.5rem;
+                font-weight: 600;
+                color: #444;
+            }
+            .form-group input,
+            .form-group select,
+            .form-group textarea {
+                width: 100%;
+                padding: 0.8rem 1rem;
+                border: 1px solid var(--border-color);
+                border-radius: 8px;
+                font-size: 1rem;
+                transition: border-color 0.3s, box-shadow 0.3s;
+                font-family: 'Poppins', sans-serif;
+            }
+            .form-group input:focus,
+            .form-group select:focus,
+            .form-group textarea:focus {
+                outline: none;
+                border-color: var(--primary-color);
+                box-shadow: 0 0 0 4px rgba(106, 17, 203, 0.2);
+            }
+            .button {
+                background: var(--primary-color);
+                color: #fff;
+                border: none;
+                padding: 0.8rem 2rem;
+                border-radius: 50px;
+                cursor: pointer;
+                font-size: 1rem;
+                font-weight: 600;
+                transition: background 0.3s, transform 0.3s;
+                box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            }
+            .button:hover {
+                background: var(--focus-color);
+                transform: translateY(-5px);
+            }
+            .toast {
+                position: fixed;
+                bottom: 2rem;
+                right: 2rem;
+                background: var(--primary-color);
+                color: #fff;
+                padding: 1rem 1.5rem;
+                border-radius: 8px;
+                box-shadow: var(--shadow-hover);
+                font-size: 1rem;
+                z-index: 1000;
+                transform: translateY(200%);
+                transition: transform 0.5s ease-in-out;
+            }
+            .toast.show {
+                transform: translateY(0);
+            }
+            .hidden {
+                display: none !important;
+            }
+            footer {
+                text-align: center;
+                padding: 2rem;
+                color: #fff;
+                font-weight: 300;
+            }
+            @media (max-width: 768px) {
+                header {
+                    flex-direction: column;
+                    gap: 1rem;
+                    padding: 20px;
+                }
+                .hero {
+                    padding: 2rem 1rem;
+                }
+                .hero h2 {
+                    font-size: 2.2rem;
+                }
+                .departments-grid {
+                    grid-template-columns: 1fr;
+                    gap: 1rem;
+                }
+                .card {
+                    padding: 1rem;
+                    font-size: 0.9rem;
+                }
+                .form-container {
+                    padding: 2rem 1.5rem;
+                }
+            }
+
+            @media (max-width: 480px) {
+                .hero h2 {
+                    font-size: 1.8rem;
+                }
+                .hero p {
+                    font-size: 1rem;
+                }
+                .search-bar input {
+                    font-size: 0.9rem;
+                    padding: 0.5rem 1rem;
+                }
+                .button {
+                    font-size: 0.9rem;
+                    padding: 0.5rem 1rem;
+                }
+            }
+
+            /* Motion Effects */
+            .card {
+                transition: transform 0.3s ease, box-shadow 0.3s ease;
+            }
+
+            .card:hover {
+                transform: translateY(-10px) scale(1.05);
+                box-shadow: var(--shadow-hover);
+            }
+
+            .button {
+                transition: background 0.3s ease, transform 0.3s ease;
+            }
+
+            .button:hover {
+                background: var(--focus-color);
+                transform: translateY(-5px);
+            }
+
+            nav a {
+                transition: background 0.3s ease, transform 0.3s ease;
+            }
+
+            nav a:hover {
+                background: var(--focus-color);
+                transform: translateY(-3px);
+            }
+
+            .toast {
+                animation: slideIn 0.5s ease-out, fadeOut 0.5s ease-in 3s forwards;
+            }
+
+            @keyframes slideIn {
+                from {
+                    transform: translateY(100%);
+                    opacity: 0;
+                }
+                to {
+                    transform: translateY(0);
+                    opacity: 1;
+                }
+            }
+
+            @keyframes fadeOut {
+                from {
+                    opacity: 1;
+                }
+                to {
+                    opacity: 0;
+                }
+            }
+        </style>
+</head>
+
+    <body>
+        <header>
+            <h1>DMS</h1>
+            <nav>
+                <a href="#/home" id="home-tab" aria-current="page">Home</a>
+                <a href="#/users" id="users-tab">Users</a>
+                <a href="#/users/new" id="create-user-tab">Create User</a>
+                <a href="#/departments/add" id="add-department-tab">Add Department</a>
+            </nav>
+        </header>
+        <main>
+            <section id="main-view">
+                <div class="hero">
+                    <h2>Welcome to the Department Hub</h2>
+                    <p>Your central place to manage departments and users with simplicity and style.</p>
+                </div>
+                <div class="search-bar">
+                    <input type="text" id="search" placeholder="Search for a department..." aria-label="Search departments">
+                </div>
+                <div class="departments-grid" id="departments-grid"></div>
+            </section>
+
+            <section id="users-view" class="hidden">
+                <div class="form-container">
+                    <h2>Users</h2>
+                    <table style="width:100%;border-collapse:collapse;">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Department</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="users-table-body"></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section id="form-views" class="hidden">
+                <div class="form-container">
+                    <h2 id="form-title"></h2>
+                    <form id="user-form" class="hidden">
+                        <div class="form-group">
+                            <label for="user-name">Name</label>
+                            <input type="text" id="user-name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="user-email">Email</label>
+                            <input type="email" id="user-email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="user-department">Department</label>
+                            <select id="user-department" required></select>
+                        </div>
+                        <button type="submit" class="button">Submit</button>
+                    </form>
+                    <form id="add-department-form" class="hidden">
+                        <div class="form-group">
+                            <label for="department-name">Department Name</label>
+                            <input type="text" id="department-name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="department-description">Description</label>
+                            <textarea id="department-description" rows="3" required></textarea>
+                        </div>
+                        <button type="submit" class="button">Add Department</button>
+                    </form>
+                </div>
+            </section>
+
+            <section id="department-detail-view" class="hidden">
+                 <div class="form-container">
+                    <h2 id="department-title"></h2>
+                    <p id="department-description-detail"></p>
+                    <h3>Users</h3>
+                    <ul id="department-users"></ul>
+                </div>
+            </section>
+        </main>
+        <div id="toast" class="toast"></div>
+        <footer>
+            <p>&copy; 2025 Department Management System. All rights reserved.</p>
+        </footer>
+        <script>
+// Helper to show/hide views
+function showView(viewId) {
+    document.getElementById('main-view').classList.add('hidden');
+    document.getElementById('users-view').classList.add('hidden');
+    document.getElementById('form-views').classList.add('hidden');
+    document.getElementById('department-detail-view').classList.add('hidden');
+    document.getElementById(viewId).classList.remove('hidden');
+}
+
+// Render departments on homepage
+function renderDepartments(search = '') {
+    const grid = document.getElementById('departments-grid');
+    grid.innerHTML = '';
+    let filtered = departments;
+    if (search) {
+        filtered = departments.filter(d => d.name.toLowerCase().includes(search.toLowerCase()));
+    }
+    if (filtered.length === 0) {
+        grid.innerHTML = '<p>No departments found.</p>';
+        return;
+    }
+    filtered.forEach(dept => {
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.innerHTML = `<h3>${dept.name}</h3><p>${dept.description || ''}</p>`;
+        grid.appendChild(card);
+    });
+}
+
+// Main render function for tab navigation
+function render() {
+    const hash = window.location.hash || '#/home';
+    if (hash.startsWith('#/home')) {
+        showView('main-view');
+        renderDepartments(document.getElementById('search').value);
+    } else if (hash.startsWith('#/users/new')) {
+        showView('form-views');
+        renderUserForm();
+    } else if (hash.startsWith('#/users')) {
+        showView('users-view');
+        renderUsers();
+    } else if (hash.startsWith('#/departments/add')) {
+        showView('form-views');
+        renderDepartmentForm();
+    } else if (hash.startsWith('#/departments/')) {
+        showView('department-detail-view');
+        const id = hash.split('/')[2];
+        renderDepartmentDetail(id);
+    } else {
+        showView('main-view');
+        renderDepartments(document.getElementById('search').value);
+    }
+}
+
+// Helper for navigation
+function navigate(hash) {
+    window.location.hash = hash;
+}
+            // Render users table
+            function renderUsers() {
+                const tbody = document.getElementById('users-table-body');
+                tbody.innerHTML = '';
+                users.forEach(user => {
+                    const dept = departments.find(d => d.id === user.departmentId)?.name || '';
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td>${user.name}</td>
+                        <td>${user.email}</td>
+                        <td>${dept}</td>
+                        <td>
+                            <button class="button" onclick="editUser('${user.id}')">Edit</button>
+                            <button class="button" style="background:#e74c3c;" onclick="deleteUser('${user.id}')">Delete</button>
+                        </td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            }
+
+            // Edit user handler
+            window.editUser = async function(id) {
+                const user = users.find(u => u.id === id);
+                if (!user) return;
+
+                document.getElementById('form-title').textContent = 'Edit User';
+                document.getElementById('user-form').classList.remove('hidden');
+                document.getElementById('add-department-form').classList.add('hidden');
+
+                document.getElementById('user-name').value = user.name;
+                document.getElementById('user-email').value = user.email;
+                document.getElementById('user-department').value = user.departmentId;
+
+                document.getElementById('user-form').onsubmit = async function(e) {
+                    e.preventDefault();
+                    const updatedData = {
+                        username: document.getElementById('user-name').value,
+                        email: document.getElementById('user-email').value,
+                        departmentId: document.getElementById('user-department').value,
+                    };
+
+                    try {
+                        const res = await fetch(`/api/users/${id}`, {
+                            method: 'PUT',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(updatedData),
+                        });
+
+                        if (!res.ok) throw new Error('Failed to update user');
+
+                        const updatedUser = await res.json();
+                        const index = users.findIndex(u => u.id === id);
+                        users[index] = updatedUser;
+                        renderUsers(); // Update the UI in real time
+                        showToast('User updated successfully!');
+                        navigate('#/users');
+                    } catch (err) {
+                        showToast('Error updating user');
+                    }
+                };
+
+                document.getElementById('form-views').classList.remove('hidden');
+            };
+
+            // Delete user handler
+            window.deleteUser = async function(id) {
+                try {
+                    const res = await fetch(`/api/users/${id}`, {
+                        method: 'DELETE',
+                    });
+
+                    if (!res.ok) throw new Error('Failed to delete user');
+
+                    users = users.filter(u => u.id !== id);
+                    renderUsers(); // Update the UI in real time
+                    showToast('User deleted successfully!');
+                } catch (err) {
+                    showToast('Error deleting user');
+                }
+            };
+
+const api = {
+    getDepartments: async () => {
+        try {
+            const res = await fetch('/api/departments?page=1&per_page=100');
+            if (!res.ok) throw new Error('Failed to fetch departments');
+            const data = await res.json();
+            return data.departments || [];
+        } catch (err) {
+            showToast('Error loading departments');
+            return [];
+        }
+    },
+               getUsers: async () => {
+                   try {
+                       const res = await fetch('/api/users');
+                       if (!res.ok) throw new Error('Failed to fetch users');
+                       return await res.json();
+                   } catch (err) {
+                       showToast('Error loading users');
+                       return [];
+                   }
+               },
+    createDepartment: async (data) => {
+        try {
+            const res = await fetch('/api/departments', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+            if (!res.ok) throw new Error('Failed to create department');
+            return await res.json();
+        } catch (err) {
+            showToast('Error creating department');
+            return null;
+        }
+    },
+               createUser: async (data) => {
+                   try {
+                       const res = await fetch('/api/users', {
+                           method: 'POST',
+                           headers: { 'Content-Type': 'application/json' },
+                           body: JSON.stringify({ username: data.name, email: data.email })
+                       });
+                       if (!res.ok) throw new Error('Failed to create user');
+                       return await res.json();
+                   } catch (err) {
+                       showToast('Error creating user');
+                       return null;
+                   }
+               }
+};
+
+            const renderUserForm = () => {
+                document.getElementById('form-title').textContent = 'Create New User';
+                document.getElementById('user-form').classList.remove('hidden');
+                document.getElementById('add-department-form').classList.add('hidden');
+                const departmentSelect = document.getElementById('user-department');
+                departmentSelect.innerHTML = departments.map(dept => `<option value="${dept.id}">${dept.name}</option>`).join('');
+            };
+
+            const renderDepartmentForm = () => {
+                document.getElementById('form-title').textContent = 'Add New Department';
+                document.getElementById('add-department-form').classList.remove('hidden');
+                document.getElementById('user-form').classList.add('hidden');
+            };
+
+            const renderDepartmentDetail = (id) => {
+                const department = departments.find(dept => dept.id === id);
+                if (!department) return;
+
+                document.getElementById('department-title').textContent = department.name;
+                document.getElementById('department-description-detail').textContent = department.description;
+                const userList = document.getElementById('department-users');
+                const departmentUsers = users.filter(user => user.departmentId === id);
+                userList.innerHTML = departmentUsers.length
+                    ? departmentUsers.map(user => `<li>${user.name} (${user.email})</li>`).join('')
+                    : '<li>No users in this department yet.</li>';
+            };
+
+            const showToast = (message) => {
+                const toast = document.getElementById('toast');
+                toast.textContent = message;
+                toast.classList.add('show');
+                setTimeout(() => toast.classList.remove('show'), 3000);
+            };
+
+            document.getElementById('search').addEventListener('input', (e) => {
+                renderDepartments(e.target.value);
+            });
+
+            document.getElementById('user-form').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const data = {
+                    name: document.getElementById('user-name').value,
+                    email: document.getElementById('user-email').value,
+                    departmentId: document.getElementById('user-department').value,
+                };
+                const newUser = await api.createUser(data);
+                users.push(newUser);
+                showToast('User created successfully!');
+                navigate('#/home');
+            });
+
+            document.getElementById('add-department-form').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const data = {
+                    name: document.getElementById('department-name').value,
+                    description: document.getElementById('department-description').value,
+                };
+                const newDepartment = await api.createDepartment(data);
+                departments.push(newDepartment);
+                showToast('Department added successfully!');
+                navigate('#/home');
+            });
+
+            window.addEventListener('hashchange', render);
+
+            const init = async () => {
+                [departments, users] = await Promise.all([
+                    api.getDepartments(),
+                    api.getUsers(),
+                ]);
+                render();
+            };
+
+            init();
+        </script>
+    </body>
+</html>
