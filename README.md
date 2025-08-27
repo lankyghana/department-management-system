@@ -15,6 +15,12 @@ The Department Management System is a web-based application designed to streamli
 - **Database**: SQLite
 - **Version Control**: Git
 
+## Developers and Their Roles
+- **Backend (Flask - Python)**: Samuel Ampiah
+- **Frontend (HTML, CSS, JavaScript)**: Abdul Baki Lateefah, Delali Praise, Samuel Dadzie Amanful
+- **Database (SQLite)**: Franklyn Nii Aryeetey Armah
+- **Full Stack Developers**: Daniel Kwadwo Takyi, Nyame Ebenezer
+
 ## Project Structure
 ```
 department_management_system/
